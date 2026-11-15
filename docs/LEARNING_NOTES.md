@@ -161,15 +161,51 @@ agreement, then read every disagreement to improve the prompt."
 
 ---
 
-## 9. Choosing a model with evidence (cost vs. quality)
+## 9. Building it for ₹0: free tiers
 
-| Model | Price per 1M tokens (in / out) | Rough cost to tag all 4,108 reviews |
+This project runs entirely free on Google's **Gemini API free tier**. A free tier means you pay
+with **limits** instead of money: a cap on requests per minute and per day.
+
+How the code copes with limits:
+- **Batching:** 20 reviews per request, so 4,108 reviews take only ~206 requests.
+- **Auto-wait:** if Google says "too many requests" (error code **429**), the tagger waits and retries.
+- **Resumable runs:** results are saved after every request. If the daily cap stops a run, the same
+  command continues where it stopped the next day.
+
+**API key safety:** the key lives in `.env`, which `.gitignore` blocks from GitHub. A leaked key
+lets strangers use your quota.
+
+**Free-tier catch:** Google may use what you send to improve its models. That's fine for public
+Play Store reviews, but never send private customer data on a free tier.
+
+---
+
+## 10. "Thinking" models: more thinking isn't always better
+
+Newer models "think" (write hidden reasoning) before answering. Test on 20 reviews:
+
+| Gemini 3.8 Flash | Time for 20 reviews |
+|---|---|
+| Default thinking | ~115 s for just 5 reviews |
+| `thinking_level = LOW` | **46 s** for 20 |
+
+Sorting a review into a theme is easy, so deep thinking only wastes time and quota.
+**PM lesson:** match the model's effort to the task's difficulty.
+
+---
+
+## 11. Choosing a model with evidence (quality vs. speed)
+
+Two free models both returned the right format:
+
+| Model | Size | Time for 20 reviews |
 |---|---|---|
-| Claude Haiku 5.5 (small, fast) | $0.10 / $0.50 | ~$0.25 |
-| Claude Opus 5.5 (most capable) | $4 / $20 | ~$9 |
+| Gemini 3.5 Flash-Lite | small, fast | ~5 s |
+| Gemini 3.8 Flash | bigger, smarter | ~46 s |
 
-Plan: run **both** on the 100-review eval (~$0.25 total), compare scores, then pick. If the small model
-scores about the same, it's ~35x cheaper. That's a real PM decision: **is the extra quality worth the cost?**
+Plan: run **both** on your 100 hand-labelled reviews, compare accuracy, then pick. If the small model
+scores about the same, it's ~9x faster, so the full run takes ~17 minutes instead of ~2.5 hours.
+That's a real PM decision: **is the extra quality worth the extra time and quota?**
 
 ---
 
