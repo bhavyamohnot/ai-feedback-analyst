@@ -1,0 +1,8 @@
+# secrets - API keys live here and must never be committed
+.env
+# python
+__pycache__/
+*.pyc
+.venv/
+# n8n local data
+.n8n/
