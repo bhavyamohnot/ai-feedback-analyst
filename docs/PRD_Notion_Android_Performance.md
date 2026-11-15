@@ -55,7 +55,7 @@ fall from **17% to under 10%** of reviews and the Play rating rises from **3.56 
 - Across **35 app versions** with 25+ reviews each (v0.6.3424 → v0.6.4288), the share of reviews
   complaining about performance ranged from **4% to 29%** and never reached zero.
 - It peaked at **23% in Mar and May 2026**, when Notion's monthly rating also hit its low (**3.22★ in April**).
-  It eased to 12–13% from Jun to Oct, then rose again to 21% in early Nov 2026.
+  It eased to 12–15% from Jun to Oct, then rose again to 21% in early Nov 2026.
 - **Implication:** this is about the architecture and the budget for speed, not a regression to roll back.
 
 ### 2.4 Users want the desktop experience on their phone
@@ -177,5 +177,5 @@ every week (the n8n digest), so a regression shows up in days, not quarters.
 Pipeline: collect 12 months of Google Play reviews (5,495) → clean (4,108) → LLM splits each review into
 points (exact quote → topic → praise/complaint/neutral/request → severity) + overall sentiment + churn
 signal → checked against 100 hand-labelled reviews (4 models compared) → ranked by impact
-(complaints × severity) → RAG Q&A for follow-up questions → weekly n8n digest. Total AI cost: **$0** (free tiers).
+(complaints × severity) → RAG Q&A for follow-up questions → weekly n8n digest.
 Sub-problem counts in §2.2 use keyword matching on the AI-tagged performance complaints.
