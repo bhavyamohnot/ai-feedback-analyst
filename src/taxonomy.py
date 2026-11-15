@@ -11,7 +11,10 @@ each topic can be loved or hated. Change topics here only, then re-run tagging a
 """
 
 TOPICS = {
-    "core_features": "What the app does: notes, pages, databases, templates, organising, flexibility, use for study/work.",
+    "core_features": ("A SPECIFIC named feature or capability: databases, templates, pages/blocks, calendar, "
+                      "tasks/to-dos, search, widgets, tags/folders, integrations, web clipper, sharing/collaboration, "
+                      "a feature being removed or missing. NOT general praise of the app for notes, organising or "
+                      "work - that is 'overall'."),
     "performance": "Speed, lag, freezing, crashes, loading, app won't open, memory or battery use.",
     "editing": "Writing and editing: typing, cursor, keyboard, formatting, copy/paste, text selection, images and attachments in notes.",
     "usability_design": "Ease of learning, navigation, layout, look and feel, onboarding, how complicated it is.",
@@ -22,7 +25,12 @@ TOPICS = {
     "sync_login": "Login and logout, sync across devices, offline access, account access.",
     "data_safety": "Lost, deleted or corrupted data, backups, importing, exporting or migrating notes.",
     "support": "Customer support and help from the company.",
-    "overall": "A general opinion that names nothing specific ('great app', 'worst app ever', 'used to be good').",
+    "overall": ("A general verdict on the whole app, including how well it does its main job, without naming a "
+                "specific feature: 'great app', 'best app for note making', 'keeps me organised', 'useful for "
+                "work and study', 'my second brain', 'worst app ever', 'used to be good'. Do NOT add an overall "
+                "point just for a closing remark ('don't recommend', 'uninstalling', 'going downhill') when the "
+                "review already has specific complaints or praise; that feeling goes into overall_sentiment "
+                "and churn_signal instead."),
     "other": "Off-topic, spam, or too unclear to place.",
 }
 

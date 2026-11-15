@@ -68,8 +68,10 @@ Work through each review in this order:
    statement about the app. There is no limit; a review may have one point or many.
 3. For each point, in this order:
    a. quote: copy the exact words it is based on (short, up to about 12 words).
-   b. topic: the one topic it is about (list below). Prefer a specific topic; use "overall" only when
-      the point names nothing specific, and "other" only for spam, off-topic or unclear text.
+   b. topic: the one topic it is about (list below). Use a specific topic when the point names one
+      (a feature, speed, price, ads, login...). Praise or criticism of the app as a whole, or of how well
+      it does its main job ("best note app", "great for organising my work"), is "overall", not
+      "core_features". Use "other" only for spam, off-topic or unclear text.
    c. type: positive, negative, neutral or request.
    d. severity: for negative points, how much it hurts the user; for every other type use "none".
    If the same topic comes up twice with the same type, keep only one point for it.
