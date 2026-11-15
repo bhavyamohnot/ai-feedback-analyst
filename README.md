@@ -3,6 +3,8 @@
 Turns thousands of messy app-store reviews into a ranked list of what to fix, answers questions about
 them with sources, and sends a weekly digest automatically.
 
+**Live dashboard:** https://ai-feedback-analyst.streamlit.app/ (8 tabs, incl. "Ask the reviews" RAG Q&A)
+
 Demo case: **Notion** (SaaS workspace) vs. its competitor **Evernote**, 12 months of Google Play reviews.
 
 ## Pipeline
@@ -14,7 +16,7 @@ collect -> clean -> tag with LLM -> evaluate vs. hand labels -> rank themes -> Q
 | Step | File | Status |
 |---|---|---|
 | 1. Collect 12 months of reviews | `src/collect.py` | done (5,495 reviews) |
-| 2. Clean (dupes, <5 words, non-English) | `src/clean.py` | done (4,108 kept) |
+| 2. Clean (dupes, <5 words, non-English) | `src/clean.py` | done (4,108 kept; weekly runs add new ones) |
 | 3a. Topic list v2 (13 neutral topics; aspect-based sentiment) | `src/taxonomy.py` | done |
 | 3b. Split each review into points (quote + topic + type), overall sentiment, churn (Gemini + Groq free tiers) | `src/tag.py` | done: all 4,108 tagged (Gemini 3.5 Flash-Lite, $0) |
 | 4a. Hand-label 100 reviews (gold set) | `src/make_eval_sample.py`, `src/label_app.py` | done |
