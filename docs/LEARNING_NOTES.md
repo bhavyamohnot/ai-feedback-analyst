@@ -275,6 +275,47 @@ two providers on the same labelled set, comparing accuracy, speed and format rel
 
 ---
 
+## 13. Eval results, and why the fix was in the spec, not the AI
+
+Bhavya hand-labelled 100 reviews. The 4 models scored against those labels:
+
+| Model | Topic + type F1 | Overall sentiment right | Churn recall |
+|---|---|---|---|
+| Gemini 3.8 Flash | **65%** | **85%** | **100%** |
+| gpt-oss-120b | 65% | 79% | 87% |
+| **Gemini 3.5 Flash-Lite** (used for the full run) | 64% | 84% | **100%** |
+| gpt-oss-20b | 58% | 84% | 73% |
+
+**First choice: Flash.** It tied for the best F1, was best on overall sentiment, and never missed a user
+who said they were leaving. Churn is the signal a product team cares about most.
+
+**What actually happened:** when the full run started, Google's servers returned **error 503
+("model experiencing high demand")** for Flash again and again. After about 15 minutes, 0 reviews were tagged.
+Flash-Lite was answering fine, so we switched. That's a sensible trade: **only 1 point lower on F1,
+also 100% churn recall**, and about 10x faster. What we give up: Flash-Lite finds fewer points
+(65% topic recall vs 81%), so the counts are conservative. It rarely invents a point, but it misses some.
+
+**PM lesson:** availability is part of model choice. The "best" model is no use if it can't
+answer when you need it. That's why the tagger is model-agnostic: switching took one word.
+
+**Error analysis:** reading the disagreements showed that **about half of all errors in every model**
+came from one blurry boundary. Bhavya tagged "best app for note making" as `overall`, but the AI
+chose `core_features`, because the old definition said "notes, organising". The rule was unclear,
+not the model. Fix: `overall` now covers verdicts on the whole app and its main job, and
+`core_features` needs a named feature (databases, templates, search...).
+
+Strong topics even before the fix: ads_prompts (100% recall, 96% precision), pricing (94% recall), ai (91%).
+
+**Caveat (be honest about it):** the definitions changed after the eval, so the 65% is the score
+*before* the fix. We didn't re-score, to avoid tuning on the same test set.
+
+**Say it in an interview:** "I benchmarked 4 models on 100 hand-labelled reviews. Error analysis showed
+half the disagreements came from one ambiguous category boundary, so I fixed the spec rather than
+swapping models. When the top model was overloaded on launch day, I switched to the runner-up, 1 point behind
+on F1 with the same 100% churn recall. That swap took one word because the pipeline is model-agnostic."
+
+---
+
 ## Coming next
 
 - **Embeddings and RAG:** letting the AI answer questions using *our* reviews, with sources
