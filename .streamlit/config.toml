@@ -1,0 +1,10 @@
+# Neutral violet accent so red stays reserved for "complaints" and blue for "praise"/Notion.
+# Separate light and dark sections keep the viewer's light/dark choice working.
+[theme.light]
+primaryColor = "#6250d6"
+
+[theme.dark]
+primaryColor = "#9085e9"
+
+[browser]
+gatherUsageStats = false

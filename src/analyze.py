@@ -93,7 +93,7 @@ SWITCH_NAMES = {"onenote": "OneNote", "microsoft onenote": "OneNote", "google ke
 
 
 VAGUE = {"another app", "alternative", "alternatives", "google", "other apps", "another", "other", "competitor",
-          "a different app", "other app", "something else", "competitors", "free app", "elsewhere",
+          "a different app", "other app", "something else", "competitors", "free app", "elsewhere", "browser", "browser version", "web version", "website",
           "another application"}  # no app actually named
 
 
