@@ -99,14 +99,18 @@ def compare_weeks():
                            "share_this_week": round(share_wk, 3), "share_prev_4_weeks": round(share_base, 3),
                            "spike": bool(n_wk.get(t, 0) >= SPIKE_MIN and share_wk >= SPIKE_RATIO * max(share_base, 0.01))})
         topics.sort(key=lambda x: -x["complaints_this_week"])
-        q = N[N.review_id.isin(wk.review_id)].sort_values(["thumbs_up", "sev_w"], ascending=False).head(5)
+        q_all = N[N.review_id.isin(wk.review_id)].sort_values(["thumbs_up", "sev_w"], ascending=False)
+        q = q_all.head(5)
+        spikes = [t["topic"] for t in topics if t["spike"]]
         sw = wk[wk.switching_to.fillna("").str.strip() != ""].switching_to.value_counts().head(5)
         out["apps"][app] = {
             "reviews_this_week": len(wk), "avg_reviews_per_week_prev_4": round(len(base) / 4, 1),
             "avg_stars_this_week": round(wk.rating.mean(), 2) if len(wk) else None,
             "avg_stars_prev_4_weeks": round(base.rating.mean(), 2) if len(base) else None,
             "leaving_this_week": int(wk.churn_signal.sum()),
-            "spikes": [t["topic"] for t in topics if t["spike"]],
+            "spikes": spikes,
+            "spike_quotes": {t: [{"quote": x.quote, "stars": int(x.rating), "likes": int(x.thumbs_up)}
+                                 for x in q_all[q_all.topic == t].head(2).itertuples()] for t in spikes},
             "top_complaints": topics[:6],
             "top_quotes": [{"topic": x.topic, "quote": x.quote, "stars": int(x.rating), "likes": int(x.thumbs_up)}
                            for x in q.itertuples()],

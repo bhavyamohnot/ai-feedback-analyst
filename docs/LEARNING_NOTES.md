@@ -406,8 +406,43 @@ measurable north star, and guardrails borrowed from what was driving the competi
 
 ---
 
+## 18. n8n: the same AI, as a visual workflow (`n8n/`)
+
+**n8n** is a drag-and-drop automation tool: boxes (**nodes**) joined by arrows. Each node does one job and passes
+its output (JSON **items**) to the next. We self-host it on the laptop (free), started by `n8n/start_n8n.ps1`.
+
+**Workflow 1: Ask the reviews (an AI agent).**
+`Chat -> AI Agent`, with three things plugged into the agent:
+- a **chat model** (Gemini Flash-Lite), the brain;
+- **memory** (last 6 messages), so "and for Evernote?" works as a follow-up;
+- two **tools**, which are plain HTTP calls to our own `src/api.py`: `search_reviews` (semantic search) and `get_topic_stats` (counts).
+
+Difference from the Python RAG (section 16): Python **always** retrieves, then answers (a fixed **chain**).
+The **agent** *decides* which tool to call, how many times and with what words (for example, search Notion,
+then Evernote, then compare). The tool inputs are filled in by the model through `$fromAI('query', ...)`.
+That's more flexible, but slower and less predictable. Rule of thumb: **chain when the steps are known, agent when they aren't.**
+
+**Workflow 2: Weekly digest.** `Schedule (Mon 9am) -> Execute Command (weekly.py) -> Code -> LLM chain (Gemini) -> Code -> file`.
+- **Schedule trigger:** cron-like timing. Here the workflow is the *orchestrator* and Python does the heavy lifting.
+- **Code node:** small JavaScript glue (parse the JSON, build the prompt, build a markdown table).
+- **Spike rule (in weekly.py):** a topic is a spike if its share of this week's reviews is at least **1.5x** the previous 4-week
+  average **and** it has at least **5 complaints**, so 1 -> 2 complaints isn't an alarm.
+- Numbers come from code; the LLM only **writes** them up. **LLMs explain numbers; they shouldn't compute them.**
+
+**Real-world gotchas we hit (good interview stories):**
+- n8n needs Node 24; Node 26 was too new for one native part, so we used a portable Node 24.
+- n8n 2.x **disables Execute Command by default** (it can run anything on the machine). We turned it on
+  deliberately (`NODES_EXCLUDE=[]`), limited file nodes to `data/digest/` (`N8N_RESTRICT_FILE_ACCESS_TO`),
+  and made n8n listen on this laptop only (`N8N_LISTEN_ADDRESS=127.0.0.1`). This is **least privilege**.
+- API keys live in n8n's encrypted **credentials** store, never inside the workflow JSON, so the JSON is safe to put on GitHub.
+
+**Say it in an interview:** "I automated the weekly voice-of-customer loop in n8n: a scheduled workflow refreshes
+the data, detects complaint spikes against a 4-week baseline, and has an LLM write the digest. A second workflow
+is a tool-using AI agent that answers PM questions with cited reviews."
+
+---
+
 ## Coming next
 
-- **Embeddings and RAG:** letting the AI answer questions using *our* reviews, with sources
-- **n8n:** drag-and-drop automation that runs the pipeline every week
-- **Prioritisation:** turning tags into a ranked "what to fix first" list
+- **Deploy:** putting the dashboard online (Streamlit Community Cloud)
+- **Resume bullets:** only real numbers from these runs

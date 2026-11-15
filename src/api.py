@@ -17,18 +17,28 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import rag  # noqa: E402
 
 PORT = 8765
-INDEX = rag.Index()
+INDEX_FILE = rag.RAG / "embeddings.npy"
+INDEX, LOADED = rag.Index(), INDEX_FILE.stat().st_mtime
 rag.embed(["warm up"], "query")  # load the embedding model once at start-up
 
 
+def index():
+    """Reload the index if the weekly run has added new reviews since we loaded it."""
+    global INDEX, LOADED
+    if INDEX_FILE.stat().st_mtime != LOADED:
+        INDEX, LOADED = rag.Index(), INDEX_FILE.stat().st_mtime
+    return INDEX
+
+
 def search(q, app=None, k=12):
-    hits = INDEX.search(rag.embed([q], "query")[0], app or None, int(k))
+    hits = index().search(rag.embed([q], "query")[0], app or None, int(k))
     return [{"n": i + 1, "app": r.app, "stars": int(r.rating), "date": f"{r.date:%b %Y}", "text": r.text,
              "helpful_likes": int(r.thumbs_up)} for i, r in enumerate(hits.itertuples())]
 
 
 def stats(app=None):
-    s = INDEX.stats if not app else INDEX.stats[INDEX.stats.app == app]
+    st = index().stats
+    s = st if not app else st[st.app == app]
     return [{"app": r.app, "topic": r.topic, "praise": int(r.positive), "complaints": int(r.negative),
              "requests": int(r.request), "reviews_in_app": int(r.reviews_in_app)} for r in s.itertuples()
             if r.topic != "other"]

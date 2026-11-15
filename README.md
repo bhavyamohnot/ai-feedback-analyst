@@ -24,7 +24,7 @@ collect -> clean -> tag with LLM -> evaluate vs. hand labels -> rank themes -> Q
 | 7. Ask questions in plain English (RAG: local BGE-small embeddings + Gemini, cited answers) | `src/rag.py`, `src/rag_ui.py` | done |
 | 8. PRD for the top problem found | [`docs/PRD_Notion_Android_Performance.md`](docs/PRD_Notion_Android_Performance.md) | done |
 | 9. Weekly update + spike detection | `src/weekly.py` | done |
-| 10. n8n: AI agent over the reviews (tools via `src/api.py`) + weekly digest workflow | `n8n/` | in progress |
+| 10. n8n: AI agent over the reviews (tools via `src/api.py`) + weekly digest workflow | `n8n/` | done ([sample digest](docs/sample_weekly_digest.md)) |
 
 ## Key findings
 
@@ -41,6 +41,14 @@ streamlit run app.py                 # dashboard (no API key needed except for "
 python src/rag.py ask "Why do people dislike Notion AI?" --app Notion
 python src/weekly.py                 # fetch new reviews, tag, analyse, compare with previous 4 weeks
 ```
+n8n (self-hosted, free; needs Node 24 and `npm install n8n`, see `n8n/start_n8n.ps1`):
+```
+powershell -ExecutionPolicy Bypass -File n8n\start_n8n.ps1   # review API + n8n on http://localhost:5678
+```
+Import `n8n/ask_the_reviews_agent.json` and `n8n/weekly_digest.json`, add a "Google Gemini (PaLM) API" credential, done.
+- **Ask the reviews (AI agent):** chat -> Gemini agent with memory -> tools `search_reviews` / `get_topic_stats` (HTTP to `src/api.py`).
+- **Weekly review digest:** every Monday 9am -> `weekly.py` -> spike detection (1.5x the 4-week share, at least 5 complaints) -> Gemini writes the digest -> `data/digest/latest.md`.
+
 Full pipeline from scratch: `collect.py -> clean.py -> tag.py --set all --model gemini-3.5-flash-lite -> analyze.py -> rag.py build`.
 API keys go in `.env` (`GEMINI_API_KEY`, optional `GROQ_API_KEY`); never committed.
 

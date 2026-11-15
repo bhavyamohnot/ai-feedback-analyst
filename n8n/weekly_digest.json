@@ -1,0 +1,281 @@
+{
+  "name": "Weekly review digest",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "weeksInterval": 1,
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "name": "Every Monday 9am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "schedule"
+    },
+    {
+      "parameters": {},
+      "name": "Run now (manual)",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ],
+      "id": "manual"
+    },
+    {
+      "parameters": {
+        "executeOnce": true,
+        "command": "cd /d C:\\Users\\erbha\\feedback-analyst && python -X utf8 src\\weekly.py"
+      },
+      "name": "Run pipeline (weekly.py)",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ],
+      "id": "exec"
+    },
+    {
+      "parameters": {
+        "jsCode": "// weekly.py prints its log to stderr and ONE JSON object to stdout\nconst out = $input.first().json;\nif (out.exitCode !== 0) throw new Error('weekly.py failed: ' + (out.stderr || '').slice(-500));\nconst d = JSON.parse(out.stdout.slice(out.stdout.indexOf('{')));\n\nconst prompt = `You write the weekly Voice-of-Customer digest for the Notion product team (Evernote = competitor).\nUse ONLY the JSON data below. Never invent numbers or quotes.\nMeaning of the numbers: share_this_week = fraction of this week's REVIEWS that complain about the topic (write it as \"27% of reviews\", never \"% of complaints\");\nshare_prev_4_weeks = the same for the previous 4 weeks; leaving_this_week = reviewers who SAID they are leaving or uninstalling (not confirmed churn).\nTopic names: performance = Speed & crashes, usability_design = Ease of use & design, ads_prompts = Ads & upgrade pop-ups,\npricing_plans = Pricing & plans, sync_login = Sync & login, core_features = Features, data_safety = Data safety, editing = Editing.\n\nWrite markdown (no title, under 300 words) with exactly these sections:\n## Headline\nOne or two sentences: the single most important thing this week.\n## Spikes\nFor each topic in \"spikes\": this week's share vs the previous 4 weeks, and one quote for that topic from spike_quotes. If \"spikes\" is empty for both apps, say \"No spikes this week.\"\n## Notion\nReviews and average stars vs the 4-week average, top complaints, how many said they are leaving.\n## Evernote (competitor watch)\nSame, briefly. Note anything Notion can learn or win from.\n## Suggested actions\nAt most 3 bullets, each tied to a number above.\n\nDATA:\n${JSON.stringify(d.apps)}`;\n\nreturn [{ json: { week: d.week, generated: d.generated, pipeline: d.pipeline, apps: d.apps, prompt } }];"
+      },
+      "name": "Build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ],
+      "id": "build"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "batching": {}
+      },
+      "name": "Write digest (LLM)",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        660,
+        0
+      ],
+      "id": "llm"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "name": "Gemini Flash-Lite",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        660,
+        220
+      ],
+      "id": "gemini-flash-lite",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TkjSGcsczhbqzsFa",
+          "name": "Google Gemini (free tier)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const d = $('Build prompt').first().json;\nlet table = '| App | Reviews this week | Avg / week (prev 4) | Stars this week | Stars (prev 4) | Saying they leave | Spikes |\\n|---|---|---|---|---|---|---|\\n';\nfor (const [app, a] of Object.entries(d.apps)) {\n  table += `| ${app} | ${a.reviews_this_week} | ${a.avg_reviews_per_week_prev_4} | ${a.avg_stars_this_week ?? '-'} | ${a.avg_stars_prev_4_weeks ?? '-'} | ${a.leaving_this_week} | ${a.spikes.join(', ') || 'none'} |\\n`;\n}\nconst md = `# Weekly review digest: ${d.week}\\n\\n_Generated ${d.generated} by the n8n workflow \"Weekly review digest\" (Gemini Flash-Lite). Source: Google Play reviews._\\n\\n${table}\\n${$input.first().json.text}\\n`;\nconst day = d.generated.slice(0, 10);\nreturn [{ json: { md, fileName: `digest_${day}.md` } }];"
+      },
+      "name": "Make markdown",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        0
+      ],
+      "id": "md"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "md",
+        "options": {
+          "fileName": "={{ $json.fileName }}"
+        }
+      },
+      "name": "To file",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1180,
+        0
+      ],
+      "id": "tofile"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "C:/Users/erbha/feedback-analyst/data/digest/latest.md",
+        "options": {}
+      },
+      "name": "Save latest.md",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        -100
+      ],
+      "id": "save-latest"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=C:/Users/erbha/feedback-analyst/data/digest/{{ $('Make markdown').item.json.fileName }}",
+        "options": {}
+      },
+      "name": "Save dated copy",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        100
+      ],
+      "id": "save-dated"
+    },
+    {
+      "parameters": {
+        "content": "## Weekly digest\n1. **Schedule**: every Monday 9am (Asia/Kolkata)\n2. **weekly.py**: fetch new reviews, clean, tag (Gemini), analyse, compare this week vs the previous 4 weeks, flag spikes\n3. **LLM chain**: Gemini turns the numbers into a short digest\n4. Saved to `data/digest/latest.md` (+ a dated copy)",
+        "height": 240,
+        "width": 480,
+        "color": 7
+      },
+      "name": "About",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -300
+      ],
+      "id": "about"
+    }
+  ],
+  "connections": {
+    "Every Monday 9am": {
+      "main": [
+        [
+          {
+            "node": "Run pipeline (weekly.py)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run now (manual)": {
+      "main": [
+        [
+          {
+            "node": "Run pipeline (weekly.py)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run pipeline (weekly.py)": {
+      "main": [
+        [
+          {
+            "node": "Build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build prompt": {
+      "main": [
+        [
+          {
+            "node": "Write digest (LLM)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Flash-Lite": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Write digest (LLM)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write digest (LLM)": {
+      "main": [
+        [
+          {
+            "node": "Make markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Make markdown": {
+      "main": [
+        [
+          {
+            "node": "To file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "To file": {
+      "main": [
+        [
+          {
+            "node": "Save latest.md",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Save dated copy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata"
+  },
+  "pinData": {},
+  "id": "FaWeeklyDigest01"
+}
