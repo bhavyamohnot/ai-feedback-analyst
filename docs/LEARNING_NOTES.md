@@ -316,6 +316,31 @@ on F1 with the same 100% churn recall. That swap took one word because the pipel
 
 ---
 
+## 14. From tags to decisions: the analysis (`src/analyze.py`)
+
+The tagger gives ~5,500 points. `analyze.py` turns them into 4 product answers:
+
+| Question | How it's measured |
+|---|---|
+| What do users love or hate? | **Net sentiment** per topic = (positive − negative) ÷ (positive + negative), from −100 to +100 |
+| What should we fix first? | **Impact score** = each complaint weighted by severity (low 1, medium 2, high 3), added up |
+| What do users want? | Count of 💡 request points per topic, with the most-liked quotes |
+| Who are we losing users to? | Competitors named in `switching_to` (vague answers like "another app" removed) |
+
+**Why impact score, not just a count?** 100 "it's a bit slow" complaints hurt less than 100 "I lost all my notes".
+Weighting by severity is a simple form of the **RICE / impact** thinking PMs use to prioritise.
+
+**Likes as evidence:** quotes are sorted by the review's Play Store "helpful" likes, because
+other users clicking "helpful" means more people agree with it.
+
+**Trends over time:** counting complaints per month shows *when* a problem started, which usually points
+to *why* (a release, a price change, an ads rollout).
+
+**Say it in an interview:** "I ranked problems by volume × severity, backed each with the most-upvoted quotes,
+and used monthly trends to tie spikes to likely causes."
+
+---
+
 ## Coming next
 
 - **Embeddings and RAG:** letting the AI answer questions using *our* reviews, with sources
