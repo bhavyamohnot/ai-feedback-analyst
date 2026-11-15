@@ -209,6 +209,40 @@ That's a real PM decision: **is the extra quality worth the extra time and quota
 
 ---
 
+## 12. Open vs. closed models, and one tagger for many providers
+
+| | Closed model | Open-weight model |
+|---|---|---|
+| Example here | Google **Gemini** | OpenAI **gpt-oss**, Alibaba **Qwen** |
+| Can you download it? | No, only use it through Google's API | Yes, anyone can download and run it |
+| Why companies care | Usually the strongest, easy to start | Privacy (runs on your own servers), no lock-in, cheaper at scale |
+
+**Groq** is a company that runs open models on very fast chips. It has a free tier, so we use it to
+try open models without owning a powerful computer.
+
+**One tagger, many providers:** `tag.py` picks the provider from the model name
+(`gemini-...` → Google, `openai/...` → Groq, `claude-...` → Anthropic). The prompt, theme list and
+output form stay identical, so the comparison is fair. This is called being **model-agnostic**:
+if one provider gets expensive or shuts down a free tier, you switch with one word.
+
+**Structured output isn't equally reliable everywhere** (from our test runs):
+
+| Model | Valid JSON? | Time for 20 reviews |
+|---|---|---|
+| Gemini 3.5 Flash-Lite | ✅ every time | ~5 s |
+| Gemini 3.8 Flash | ✅ every time | ~46 s |
+| gpt-oss-120b (Groq) | ✅ every time | ~5 s |
+| gpt-oss-20b (Groq) | ⚠️ 1 bad answer in 6 requests (re-run fixed it) | ~2 s |
+| Qwen 3.8 (Groq) | ❌ broken JSON, dropped | – |
+
+**PM lesson:** reliability is a product requirement, not just accuracy. A model that's right 95% of
+the time but breaks the format 1 in 6 times needs retry logic, or it'll crash the pipeline.
+
+**Say it in an interview:** "I made the pipeline model-agnostic and benchmarked four free models from
+two providers on the same labelled set, comparing accuracy, speed and format reliability."
+
+---
+
 ## Coming next
 
 - **Embeddings and RAG:** letting the AI answer questions using *our* reviews, with sources

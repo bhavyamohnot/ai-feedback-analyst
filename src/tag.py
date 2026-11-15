@@ -3,12 +3,12 @@
     python src/tag.py --set eval --model gemini-2.5-flash     # the 100 hand-labelled reviews
     python src/tag.py --set all  --model gemini-2.5-flash     # all 4,108 clean reviews
 
-Works with Google Gemini (free tier) and Anthropic Claude (paid); the provider is picked from the
-model name. Reviews are sent 20 per request. The answer comes back as structured JSON validated by
+Works with Google Gemini (free tier), Groq (free tier, open models such as openai/gpt-oss-120b)
+and Anthropic Claude (paid); the provider is picked from the model name. Reviews are sent 20 per request. The answer comes back as structured JSON validated by
 Pydantic, so the code never parses free text. Results are appended to data/tags_<set>_<model>.jsonl,
 which makes the run resumable: re-running skips reviews already tagged (useful when a free-tier
 daily limit stops a run halfway).
-Keys live in the project's .env file: GEMINI_API_KEY (or ANTHROPIC_API_KEY for Claude).
+Keys live in the project's .env file: GEMINI_API_KEY, GROQ_API_KEY (or ANTHROPIC_API_KEY for Claude).
 """
 import argparse
 import json
@@ -119,8 +119,62 @@ class Claude:
         return None  # the Anthropic SDK already retries rate limits itself
 
 
+def strict_schema(model_cls):
+    """Pydantic schema -> plain JSON schema with references inlined and no extra fields allowed
+    (the strict format Groq's structured outputs expect)."""
+    schema = model_cls.model_json_schema()
+    defs = schema.pop("$defs", {})
+
+    def fix(node):
+        if isinstance(node, dict):
+            if "$ref" in node:
+                return fix(defs[node["$ref"].split("/")[-1]])
+            node = {k: fix(v) for k, v in node.items() if k != "title"}
+            if node.get("type") == "object":
+                node["additionalProperties"] = False
+                node["required"] = list(node.get("properties", {}))
+            return node
+        if isinstance(node, list):
+            return [fix(x) for x in node]
+        return node
+
+    return fix(schema)
+
+
+class Groq:
+    """Groq runs open models (e.g. OpenAI's gpt-oss, Alibaba's Qwen) fast, with a free tier."""
+
+    def __init__(self, model):
+        import groq
+        self.groq, self.model = groq, model
+        self.client = groq.Groq(api_key=os.environ["GROQ_API_KEY"], max_retries=0)
+        self.schema = strict_schema(TagBatch)
+
+    def call(self, prompt):
+        extra = {"reasoning_effort": "low"} if "gpt-oss" in self.model else {}
+        resp = self.client.chat.completions.create(
+            model=self.model,
+            messages=[{"role": "system", "content": SYSTEM}, {"role": "user", "content": prompt}],
+            response_format={"type": "json_schema",
+                             "json_schema": {"name": "tag_batch", "strict": True, "schema": self.schema}},
+            **extra,
+        )
+        parsed = TagBatch.model_validate_json(resp.choices[0].message.content)
+        return parsed, resp.usage.prompt_tokens, resp.usage.completion_tokens
+
+    def wait_seconds(self, err):
+        if not isinstance(err, self.groq.RateLimitError):
+            return None
+        retry = err.response.headers.get("retry-after") if err.response is not None else None
+        return float(retry) + 1 if retry else 20
+
+
 def make_provider(model):
-    return Claude(model) if model.startswith("claude") else Gemini(model)
+    if model.startswith("claude"):
+        return Claude(model)
+    if model.startswith("gemini") or model.startswith("gemma"):
+        return Gemini(model)
+    return Groq(model)  # e.g. openai/gpt-oss-120b, qwen/qwen3.8-27b
 
 
 # ----------------------------- tagging ---------------------------------------
@@ -162,7 +216,7 @@ def main():
     load_dotenv(ROOT / ".env")
     provider = make_provider(args.model)
     df = load_set(args.set)
-    out = DATA / f"tags_{args.set}_{args.model}.jsonl"
+    out = DATA / f"tags_{args.set}_{args.model.replace('/', '_')}.jsonl"
     done = set()
     if out.exists():
         done = {json.loads(line)["review_id"] for line in out.read_text(encoding="utf-8").splitlines()}
