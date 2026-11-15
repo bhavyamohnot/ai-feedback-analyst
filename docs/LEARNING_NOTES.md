@@ -84,23 +84,45 @@ recently made its users very unhappy. That's a **hypothesis**, and the AI taggin
 
 ---
 
-## 6. Building the theme list (taxonomy)
+## 6. Building the topic list (taxonomy)
 
 Before any AI tagging, we read 145 reviews (both apps, every star rating) and grouped similar
-complaints together. This is **affinity mapping**, the same thing PMs do with sticky notes after user interviews.
-Result: 13 themes in `src/taxonomy.py`, e.g. `performance`, `pricing_free_plan`, `ads_upsell`, `billing_trust`.
+comments together. This is **affinity mapping**, the same thing PMs do with sticky notes after user interviews.
+Result: 13 topics in `src/taxonomy.py`, e.g. `performance`, `ai`, `pricing_plans`, `ads_prompts`, `billing`.
 
-**Why not let the AI invent themes for every review?** You'd get "slow app", "laggy", "performance issues"
-as three different themes and couldn't count anything. A **fixed list** makes the results countable and
+**Why not let the AI invent topics for every review?** You'd get "slow app", "laggy", "performance issues"
+as three different topics and couldn't count anything. A **fixed list** makes the results countable and
 comparable over time.
 
 **Design rules we followed:**
-- Each theme should be clearly different (we split `ads_upsell` from `pricing_free_plan`, because
+- Each topic should be clearly different (we split `ads_prompts` from `pricing_plans`, because
   "too many pop-ups" and "too expensive" need different fixes).
-- Always have an `other` bucket, and watch its size. If it gets big, a theme is missing.
+- Topic names are **neutral**: `performance` covers "so fast!" and "crashes constantly".
+- `overall` holds general opinions that name nothing specific ("great app", "worst app ever").
+- Always have an `other` bucket, and watch its size. If it gets big, a topic is missing.
 
-**Say it in an interview:** "I built the theme list by affinity-mapping a sample of reviews first,
-so the AI was tagging against categories that reflect real user language."
+### Version 1 → version 2 (a real design decision)
+
+**v1** had a `praise` theme next to problem themes, plus one sentiment per review. Bhavya spotted the flaw:
+if all praise goes into one bucket, sentiment tells you nothing new (praise is always positive), and
+"AI is amazing" and "AI is forced on me" end up in different buckets, so you can't see how users feel about the AI.
+
+**v2 = aspect-based sentiment analysis**, the standard approach in customer-feedback tools:
+
+1. Split the review into **points** (as many as it has).
+2. Each point gets a **topic** (what it's about) and a **type**: 👍 positive / 👎 negative / ➖ neutral / 💡 request.
+3. The whole review gets an **overall sentiment** (positive / mixed / negative / neutral) from the text **and** the stars.
+4. Plus: are they leaving, and to which competitor?
+
+**Analogy:** a restaurant review says "Food was great, service was slow." v2 records
+**food = 👍** and **service = 👎**, instead of throwing the whole review into a "praise" or "complaint" folder.
+
+Why "request" is a point type, not a topic: "please bring back the old editor" is *about* `editing`.
+Tagging it `editing` + 💡 tells the team which area people want improved.
+
+**Say it in an interview:** "My first design had a praise bucket, which made sentiment redundant. I switched
+to aspect-based sentiment, so every topic has its own positive/negative split. That turned the output into a
+strengths-vs-weaknesses map per app instead of a complaint counter."
 
 ---
 
@@ -141,17 +163,27 @@ An **eval** checks how often the AI is right, against answers a human agreed on.
 Testing on reviews you studied is like an exam with questions you've already seen. The score looks
 great but means nothing.
 
-**Metrics we use:**
+**Metrics we use** (each review has a *list* of points, so we compare lists):
 
 | Metric | Plain meaning |
 |---|---|
-| Theme hit rate | Your main theme is one of the AI's 1–2 themes |
-| Sentiment accuracy | Same positive/mixed/negative as you |
-| **Precision** (churn) | When the AI says "this user is leaving", how often is it true? |
-| **Recall** (churn) | Of all users who really are leaving, how many did the AI catch? |
+| **Topic recall** | Of the topics *you* tagged, how many did the AI also find? (did it miss things?) |
+| **Topic precision** | Of the topics the *AI* tagged, how many did you also tag? (did it invent things?) |
+| **F1** | One number combining recall and precision. Used to rank models |
+| Pair recall / precision / F1 | The same, but topic **and** type must match (e.g. performance + 👎) |
+| Overall sentiment accuracy | Same overall sentiment as you |
+| Churn precision / recall | Same idea for "is this user leaving?" |
 
 **Precision vs. recall analogy:** a fishing net. Recall = how many of the fish in the lake you caught.
 Precision = how much of what's in your net is actually fish, not boots.
+
+**Why F1 and not just the average?** A model that tags every topic on every review gets 100% recall
+but terrible precision. F1 punishes being lopsided, so it only scores high when both are good.
+
+**Counting rule:** within one review, each topic counts once, even if it's mentioned twice.
+
+**Evidence quotes:** the AI must copy the exact words behind each point *before* choosing the topic,
+like "show your working" in maths. It makes fewer mistakes, and anyone can check *why* it tagged something.
 
 **Error analysis:** `evaluate.py` prints every disagreement. Reading *why* the AI was wrong
 (vague review? bad theme definition?) tells you what to fix. Sometimes the fix is in the theme list, not the AI.

@@ -15,10 +15,10 @@ collect -> clean -> tag with LLM -> evaluate vs. hand labels -> rank themes -> Q
 |---|---|---|
 | 1. Collect 12 months of reviews | `src/collect.py` | done (5,495 reviews) |
 | 2. Clean (dupes, <5 words, non-English) | `src/clean.py` | done (4,108 kept) |
-| 3a. Theme list (13 themes, affinity-mapped from 145 reviews) | `src/taxonomy.py` | done |
-| 3b. Tag each review with an LLM (structured output; Gemini + Groq free tiers) | `src/tag.py` | eval set tagged by 4 models |
+| 3a. Topic list v2 (13 neutral topics; aspect-based sentiment) | `src/taxonomy.py` | done |
+| 3b. Split each review into points (quote + topic + type), overall sentiment, churn (Gemini + Groq free tiers) | `src/tag.py` | eval set tagged by 4 models |
 | 4a. Hand-label 100 reviews (gold set) | `src/make_eval_sample.py`, `src/label_app.py` | in progress |
-| 4b. Eval: compare LLM tags to hand labels | `src/evaluate.py` | built |
+| 4b. Eval: topic/pair recall, precision, F1 vs. hand labels | `src/evaluate.py` | built |
 | 5. Rank themes by volume x severity, with example quotes | - | |
 | 6. Ask questions in plain English (RAG, with citations) | - | |
 | 7. Weekly digest automation (n8n) | - | |
