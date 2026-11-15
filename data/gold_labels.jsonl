@@ -1,0 +1,100 @@
+{"review_id": "3df896cb-7397-4a96-ae2e-c67d927adca2", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "4cd4177a-7d05-40ad-a90c-645e52b564cb", "points": [{"topic": "usability_design", "type": "negative"}, {"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "mixed"}
+{"review_id": "58796a8c-b051-4229-a943-18ed48f0ad6f", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "96d2426d-243b-4ae9-9df5-5a0d4fcaf1ac", "points": [{"topic": "sync_login", "type": "negative"}, {"topic": "data_safety", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "c198d16c-5d67-4b63-b25c-6c9e6682eb34", "points": [{"topic": "performance", "type": "negative"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "e5ac08b1-7f1d-425c-9068-1aff9697f925", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "97e20d88-03a9-4459-9c1b-92233c8e0f74", "points": [{"topic": "pricing_plans", "type": "negative"}, {"topic": "ai", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "cbbfeda8-a284-494e-8dd6-db63d904723a", "points": [{"topic": "ai", "type": "negative"}, {"topic": "pricing_plans", "type": "negative"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "50aae04f-00af-496a-b019-97fb1ce15ee5", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "cd2750c3-f2de-46c8-8b35-c5f1d622c82f", "points": [{"topic": "core_features", "type": "positive"}, {"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "c28b51b6-3c07-4862-9b0d-d27bd99b23bf", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "1485ba1f-324e-4a13-99e1-275ddd8fa557", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "53ea0acd-15ff-4592-8ab3-6524bd9c315a", "points": [{"topic": "usability_design", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "62043e60-fe7d-4821-8bb0-051351244cde", "points": [{"topic": "ai", "type": "negative"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "d9985d38-28e4-411c-9c14-5c5267b43345", "points": [{"topic": "overall", "type": "negative"}, {"topic": "pricing_plans", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "62a78d95-677e-457d-a900-8393c2a8da12", "points": [{"topic": "ai", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "988be71e-a916-4d40-aa5e-dd6fe9651841", "points": [{"topic": "overall", "type": "positive"}, {"topic": "core_features", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "3cb58d19-74a6-4dad-974a-e2bf83042991", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "2bf9737f-ab22-45f6-a227-60916e6da28e", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "mixed"}
+{"review_id": "05f0501a-edbe-4625-8fad-b6e729ee8736", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "3b7c3c0a-0f7a-40f8-a39f-eaca64b7cffe", "points": [{"topic": "overall", "type": "positive"}, {"topic": "performance", "type": "negative"}], "churn_signal": false, "overall_sentiment": "mixed"}
+{"review_id": "fdcbcc7b-e5ff-4b68-8e6e-51b1628c684f", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "4d826a12-0138-4925-bcdd-20e1918465ed", "points": [{"topic": "core_features", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "aaa192fd-9d4b-4865-8212-959c0a917473", "points": [{"topic": "pricing_plans", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "b63df23a-364b-41f9-b5be-c8d3f455cd03", "points": [{"topic": "core_features", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "6d991bd8-9493-4caa-9a27-641c0c0b00fa", "points": [{"topic": "pricing_plans", "type": "negative"}, {"topic": "ads_prompts", "type": "negative"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "a97b7027-b7b8-4e66-9f07-1fc0a9e6f1c8", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "0c21fff9-7c9f-42cd-ac20-225b5b5a95e6", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "01a8806f-fb0c-4e56-8448-0d19fa3bcd82", "points": [{"topic": "pricing_plans", "type": "negative"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "1ebfd350-5522-4c1c-a379-4d1ff6fb94c2", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "8932b7e7-1490-4f32-af2c-fb3f178b1759", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "4c3d5791-f3dc-48e0-8968-145bab67edd4", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "ff3f86a3-9040-469a-a8e0-40860d39d4a5", "points": [{"topic": "usability_design", "type": "negative"}, {"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "4be3c87a-6f8d-4254-8476-42376d4a239b", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "1d0e332b-ab36-4626-a83e-9c1baf88aec1", "points": [{"topic": "ai", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "674ca430-6251-42ad-b2dc-08b7d093fa4b", "points": [{"topic": "overall", "type": "positive"}, {"topic": "performance", "type": "negative"}], "churn_signal": false, "overall_sentiment": "mixed"}
+{"review_id": "e371d406-c801-4143-bee4-19de9928165b", "points": [{"topic": "sync_login", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "e8e0e1a3-9236-4734-9aab-7d7db906d467", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "ca41956a-6da1-495c-ac08-4dedc417fa6a", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "3760e358-ec40-4928-9b89-a35ccaf3f9fc", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "874993f8-f5e4-4ce6-915b-ab5c7a2e0186", "points": [{"topic": "performance", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "137679ef-465e-46f4-8566-6799d93bdbc2", "points": [{"topic": "pricing_plans", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "ba6da88d-e78e-46d6-834d-a640fa5830f2", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "37d67f43-d78d-45c0-a809-16f205615ae6", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "36c5063f-465e-4109-bb47-acd61aa79711", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "a0faa804-6a8d-4d36-a498-638e76583d64", "points": [{"topic": "usability_design", "type": "negative"}, {"topic": "overall", "type": "neutral"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "0cfd1724-e96b-4472-8292-6201483f2c7a", "points": [{"topic": "performance", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "ea8dd908-2402-48f6-bdaf-a409e8d87961", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "f83006cb-2c6e-4f8b-a9fa-29550e85d0d2", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "7b7a3a86-d89a-437a-8bf2-4dcbcc028552", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "8b489553-ddfe-49c8-80df-ca81dbf66650", "points": [{"topic": "ai", "type": "positive"}, {"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "a79a08fd-d793-42ba-8698-d51d9ff00201", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "9f587909-e254-4d20-a2f1-440cd989727d", "points": [{"topic": "data_safety", "type": "negative"}], "churn_signal": false, "overall_sentiment": "mixed"}
+{"review_id": "c2649c06-7ba2-41ca-ace3-58b007fc6918", "points": [{"topic": "performance", "type": "negative"}, {"topic": "ads_prompts", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "07c83876-1254-4a98-9077-76bdab4703b7", "points": [{"topic": "usability_design", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "41fdde51-b0cb-4a19-89fa-b37eec611dd3", "points": [{"topic": "billing", "type": "negative"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "1ba36c8b-ba02-48a9-90fe-8bb7d8639ba0", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "d4eb73e8-59a8-4bf6-a411-ac11a8004e81", "points": [{"topic": "pricing_plans", "type": "negative"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "5c77d876-d7d8-4861-a3f4-622e6f80bf5c", "points": [{"topic": "performance", "type": "negative"}, {"topic": "sync_login", "type": "negative"}, {"topic": "overall", "type": "neutral"}], "churn_signal": false, "overall_sentiment": "neutral"}
+{"review_id": "69d22381-00e6-44f6-9466-44613dd9ea73", "points": [{"topic": "performance", "type": "negative"}, {"topic": "usability_design", "type": "negative"}, {"topic": "overall", "type": "neutral"}], "churn_signal": false, "overall_sentiment": "mixed"}
+{"review_id": "c9253dab-b602-473e-a14a-27b7c009c932", "points": [{"topic": "pricing_plans", "type": "negative"}, {"topic": "usability_design", "type": "negative"}], "churn_signal": false, "overall_sentiment": "mixed"}
+{"review_id": "824c87b8-490f-471a-93ea-616bf0fa4435", "points": [{"topic": "ai", "type": "negative"}, {"topic": "performance", "type": "negative"}, {"topic": "usability_design", "type": "negative"}, {"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "mixed"}
+{"review_id": "a8d4e2e6-c2ba-4423-b67b-81950aea4a03", "points": [{"topic": "performance", "type": "negative"}, {"topic": "ai", "type": "negative"}], "churn_signal": false, "overall_sentiment": "mixed"}
+{"review_id": "07d5803a-413c-40e4-b0e8-4deaaa36228e", "points": [{"topic": "usability_design", "type": "negative"}, {"topic": "editing", "type": "negative"}], "churn_signal": false, "overall_sentiment": "mixed"}
+{"review_id": "32c7d780-12bf-4fc1-a899-655114b84af6", "points": [{"topic": "overall", "type": "positive"}, {"topic": "core_features", "type": "request"}], "churn_signal": false, "overall_sentiment": "neutral"}
+{"review_id": "f76474b3-05c4-4205-a122-31991d91d69c", "points": [{"topic": "pricing_plans", "type": "negative"}, {"topic": "ai", "type": "negative"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "f427d391-ddc0-4d0a-8949-bfb55770adcf", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "22651c7b-0448-492d-9fc1-5c8234527cdd", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "ad30a983-ff3c-47a1-bbcd-f5eb6d95cc42", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "2bc75bd8-0cc9-4343-b02d-abca4ba5edd5", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "2e2d09e9-84eb-46a4-b3e1-97d4f366e680", "points": [{"topic": "sync_login", "type": "request"}], "churn_signal": false, "overall_sentiment": "neutral"}
+{"review_id": "4dae3902-c7a0-4cfa-83ea-8006b47bd13c", "points": [{"topic": "performance", "type": "negative"}, {"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "46a679e1-7809-48d7-961e-133ba26298c9", "points": [{"topic": "performance", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "6f8ece20-f83c-4500-90ae-90231aee3719", "points": [{"topic": "overall", "type": "neutral"}], "churn_signal": false, "overall_sentiment": "neutral"}
+{"review_id": "f61abbfe-4081-4f0b-8afe-8a1def58bad2", "points": [{"topic": "ads_prompts", "type": "negative"}, {"topic": "pricing_plans", "type": "negative"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "ca59983b-3dec-49ff-b24b-ea9f99d08a2e", "points": [{"topic": "ads_prompts", "type": "negative"}, {"topic": "pricing_plans", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "21fe65a1-1cce-490c-baba-d86cf38c2b69", "points": [{"topic": "ads_prompts", "type": "negative"}, {"topic": "pricing_plans", "type": "negative"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "d63065b3-93ba-4c49-aa4e-ec5215a9a0ab", "points": [{"topic": "ai", "type": "negative"}, {"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "mixed"}
+{"review_id": "38ea527a-05d5-427b-a456-6376f805ce81", "points": [{"topic": "editing", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "37066b50-2343-4650-9910-210f1f5c4b01", "points": [{"topic": "ai", "type": "negative"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "25dc1b2f-ab35-4360-9737-be381a5e6ff0", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "47b14526-59fa-4ad8-83ea-8b5450588cf4", "points": [{"topic": "performance", "type": "negative"}, {"topic": "core_features", "type": "positive"}, {"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "53148366-6a05-460a-ad7e-fbc73d8ccd86", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "1c6e6360-9706-4c6a-a72d-fd8aad897518", "points": [{"topic": "overall", "type": "neutral"}], "churn_signal": false, "overall_sentiment": "neutral"}
+{"review_id": "f8c9d083-b04e-4870-a0f4-e4dc3250cceb", "points": [{"topic": "overall", "type": "positive"}, {"topic": "usability_design", "type": "neutral"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "25e0594d-f988-4a02-aaf4-36bd5d7a9bd3", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "2270c97e-f1b5-496b-b1bb-d8e69ce26e93", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "75332604-5feb-435a-ab72-08cecc1aec1a", "points": [{"topic": "usability_design", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "5df3a72b-29d5-4ec8-b668-c776c97adf18", "points": [{"topic": "pricing_plans", "type": "positive"}, {"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "3c46f616-c209-4cfd-858a-aeecf061266c", "points": [{"topic": "performance", "type": "negative"}, {"topic": "performance", "type": "request"}], "churn_signal": false, "overall_sentiment": "mixed"}
+{"review_id": "4504d406-a3e7-4608-86d5-b7ac535e432b", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "ad612e43-944c-49fd-9960-384ff682945d", "points": [{"topic": "support", "type": "negative"}, {"topic": "data_safety", "type": "negative"}], "churn_signal": false, "overall_sentiment": "neutral"}
+{"review_id": "d50caf18-13c9-47ca-a45a-b4178d209239", "points": [{"topic": "overall", "type": "positive"}, {"topic": "pricing_plans", "type": "request"}], "churn_signal": false, "overall_sentiment": "positive"}
+{"review_id": "631bc522-45ee-4145-9b74-8d3566193970", "points": [{"topic": "ads_prompts", "type": "negative"}, {"topic": "pricing_plans", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "467be63d-06ca-4009-891a-ea727ef7afa6", "points": [{"topic": "performance", "type": "negative"}], "churn_signal": false, "overall_sentiment": "mixed"}
+{"review_id": "4f26261c-5334-4587-8efc-0ad9f94ca048", "points": [{"topic": "ads_prompts", "type": "negative"}, {"topic": "sync_login", "type": "positive"}], "churn_signal": true, "overall_sentiment": "negative"}
+{"review_id": "66cae9f7-eb64-44b0-b742-7cb2c4a1e0b0", "points": [{"topic": "performance", "type": "negative"}, {"topic": "core_features", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "ab75d7d3-340f-40a9-aa88-23bed04f99a7", "points": [{"topic": "usability_design", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "40ddb295-3ffc-468e-b93c-164f434f9cf5", "points": [{"topic": "ads_prompts", "type": "negative"}], "churn_signal": false, "overall_sentiment": "negative"}
+{"review_id": "2168f466-bd63-4c0c-8ca2-81a06b7a564e", "points": [{"topic": "overall", "type": "positive"}], "churn_signal": false, "overall_sentiment": "positive"}

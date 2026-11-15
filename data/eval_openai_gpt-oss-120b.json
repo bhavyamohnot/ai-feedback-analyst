@@ -1,0 +1,15 @@
+{
+  "model": "openai/gpt-oss-120b",
+  "n": 100,
+  "topic_recall": 0.7285714285714285,
+  "topic_precision": 0.6455696202531646,
+  "topic_f1": 0.6845637583892618,
+  "pair_recall": 0.6879432624113475,
+  "pair_precision": 0.610062893081761,
+  "pair_f1": 0.6466666666666666,
+  "overall_acc": 0.79,
+  "churn_precision": 0.6842105263157895,
+  "churn_recall": 0.8666666666666667,
+  "points_per_review_ai": 1.59,
+  "points_per_review_you": 1.41
+}

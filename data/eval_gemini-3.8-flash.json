@@ -1,0 +1,15 @@
+{
+  "model": "gemini-3.8-flash",
+  "n": 100,
+  "topic_recall": 0.8142857142857143,
+  "topic_precision": 0.6263736263736264,
+  "topic_f1": 0.7080745341614908,
+  "pair_recall": 0.75177304964539,
+  "pair_precision": 0.572972972972973,
+  "pair_f1": 0.6503067484662577,
+  "overall_acc": 0.85,
+  "churn_precision": 0.8333333333333334,
+  "churn_recall": 1.0,
+  "points_per_review_ai": 1.85,
+  "points_per_review_you": 1.41
+}
