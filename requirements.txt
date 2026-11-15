@@ -1,2 +1,6 @@
 google-play-scraper
 pandas
+anthropic
+pydantic
+python-dotenv
+streamlit

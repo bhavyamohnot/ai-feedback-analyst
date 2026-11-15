@@ -84,11 +84,97 @@ recently made its users very unhappy. That's a **hypothesis**, and the AI taggin
 
 ---
 
+## 6. Building the theme list (taxonomy)
+
+Before any AI tagging, we read 145 reviews (both apps, every star rating) and grouped similar
+complaints together. This is **affinity mapping**, the same thing PMs do with sticky notes after user interviews.
+Result: 13 themes in `src/taxonomy.py`, e.g. `performance`, `pricing_free_plan`, `ads_upsell`, `billing_trust`.
+
+**Why not let the AI invent themes for every review?** You'd get "slow app", "laggy", "performance issues"
+as three different themes and couldn't count anything. A **fixed list** makes the results countable and
+comparable over time.
+
+**Design rules we followed:**
+- Each theme should be clearly different (we split `ads_upsell` from `pricing_free_plan`, because
+  "too many pop-ups" and "too expensive" need different fixes).
+- Always have an `other` bucket, and watch its size. If it gets big, a theme is missing.
+
+**Say it in an interview:** "I built the theme list by affinity-mapping a sample of reviews first,
+so the AI was tagging against categories that reflect real user language."
+
+---
+
+## 7. LLM API and structured output
+
+**LLM API:** instead of typing into ChatGPT, your code sends text to the model over the internet and
+gets the answer back. You pay per **token** (about ¾ of a word), with separate prices for input
+(what you send) and output (what it writes).
+
+**Structured output:** we don't ask "what do you think of this review?" (free text, impossible to count).
+We give the model a strict form to fill in:
+
+```
+themes: [performance]    sentiment: negative    severity: high
+churn_signal: true       switching_to: "Google Keep"    summary: "App crashes after every update"
+```
+
+The API **guarantees** the answer matches this form (we define it with Pydantic in `src/tag.py`),
+so the code never breaks on a weird answer.
+
+**Analogy:** asking 100 people "how was your trip?" vs. handing them a form with checkboxes. Only the
+form gives you numbers.
+
+**Cost tricks used:** 20 reviews per request (the instructions are sent once, not 20 times), and
+`effort: low` because sorting reviews is a simple task that doesn't need deep thinking.
+
+---
+
+## 8. Evals: the most important AI concept for a PM
+
+An **eval** checks how often the AI is right, against answers a human agreed on.
+
+1. You hand-label 100 reviews. That's the **gold set** (answer key).
+2. The AI labels the same 100.
+3. We compare and get a score.
+
+**Leakage:** the 100 test reviews **don't include** the 145 we read to design the themes.
+Testing on reviews you studied is like an exam with questions you've already seen. The score looks
+great but means nothing.
+
+**Metrics we use:**
+
+| Metric | Plain meaning |
+|---|---|
+| Theme hit rate | Your main theme is one of the AI's 1–2 themes |
+| Sentiment accuracy | Same positive/mixed/negative as you |
+| **Precision** (churn) | When the AI says "this user is leaving", how often is it true? |
+| **Recall** (churn) | Of all users who really are leaving, how many did the AI catch? |
+
+**Precision vs. recall analogy:** a fishing net. Recall = how many of the fish in the lake you caught.
+Precision = how much of what's in your net is actually fish, not boots.
+
+**Error analysis:** `evaluate.py` prints every disagreement. Reading *why* the AI was wrong
+(vague review? bad theme definition?) tells you what to fix. Sometimes the fix is in the theme list, not the AI.
+
+**Say it in an interview:** "Before trusting the AI on 4,000 reviews, I hand-labelled 100 and measured
+agreement, then read every disagreement to improve the prompt."
+
+---
+
+## 9. Choosing a model with evidence (cost vs. quality)
+
+| Model | Price per 1M tokens (in / out) | Rough cost to tag all 4,108 reviews |
+|---|---|---|
+| Claude Haiku 5.5 (small, fast) | $0.10 / $0.50 | ~$0.25 |
+| Claude Opus 5.5 (most capable) | $4 / $20 | ~$9 |
+
+Plan: run **both** on the 100-review eval (~$0.25 total), compare scores, then pick. If the small model
+scores about the same, it's ~35x cheaper. That's a real PM decision: **is the extra quality worth the cost?**
+
+---
+
 ## Coming next
 
-- **LLM API:** how a program talks to an AI model
-- **Theme discovery:** letting the AI suggest categories, then a human fixing them
-- **Structured output:** making the AI answer in a fixed format a program can read
-- **Evals:** measuring how often the AI is right
 - **Embeddings and RAG:** letting the AI answer questions using *our* reviews, with sources
 - **n8n:** drag-and-drop automation that runs the pipeline every week
+- **Prioritisation:** turning tags into a ranked "what to fix first" list
