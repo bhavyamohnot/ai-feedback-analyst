@@ -341,6 +341,71 @@ and used monthly trends to tie spikes to likely causes."
 
 ---
 
+## 15. The dashboard (`app.py`, Streamlit)
+
+**Streamlit** turns a Python script into a web page: every `st.metric`, `st.altair_chart`,
+`st.tabs` line becomes a piece of the page. No HTML or JavaScript needed.
+
+Design choices (each one is a rule from data-viz practice):
+- **Color has a job.** Blue = praise, red = complaints everywhere; Notion = blue and Evernote = orange
+  only on charts that compare the two apps. Buttons use violet so red always means "complaint".
+- **The butterfly chart** (complaints left, praise right) shows each topic's love/hate split at a glance.
+- **One number per tile** on the overview ("3.56★", "4% say they're leaving") - the headline before the detail.
+- **Evidence next to every claim:** the "Fix first" tab shows the most-liked real quotes under each problem.
+- **Light and dark mode**, both checked with screenshots.
+
+**Why it needs no API key:** the dashboard only *reads* files the pipeline already produced. Only the
+"Ask the reviews" tab calls an AI model. So the live demo is free and can't break when an AI provider is busy.
+
+---
+
+## 16. RAG: letting the AI answer from *our* reviews (`src/rag.py`)
+
+**Problem:** ask ChatGPT "why do Notion users hate the AI?" and it guesses from its training data.
+**RAG (retrieval-augmented generation)** = find the relevant reviews first, then make the AI answer *only* from them.
+
+**Analogy:** an open-book exam. The AI isn't trusted to remember; it must look things up and cite the page.
+
+Three steps:
+1. **Embeddings.** Each review becomes a list of 384 numbers (a *vector*) that captures its meaning.
+   Reviews with similar meaning get similar vectors, so "takes forever to open" sits near "so slow to load"
+   even though they share no words. That's **semantic search**, vs. keyword search.
+2. **Retrieve.** The question becomes a vector too; we take the 25 reviews pointing in the most similar
+   direction (**cosine similarity**). With 4,108 reviews a NumPy matrix is enough; at millions you'd use a
+   **vector database** (Pinecone, pgvector, Qdrant).
+3. **Generate with citations.** Gemini gets the question + the 25 reviews + topic counts for *all* reviews,
+   with rules: cite every claim as [n], use the counts for "how many" questions, and say so if the reviews don't answer it.
+   Citations make answers **checkable**, the main defence against **hallucination** (the AI making things up).
+
+**A real constraint we hit:** Google's free embedding API allows only **1,000 texts a day**, and we had 4,108.
+Fix: **BGE-small**, a free open-source embedding model that runs on the laptop (2.5 minutes, no quota).
+Same idea as section 12: don't get locked in to one provider.
+
+**Hybrid answer:** retrieved quotes say *why*; pre-computed counts say *how many*. RAG alone can't count,
+because it only sees 25 reviews.
+
+**Say it in an interview:** "I built a RAG Q&A over 4,108 reviews: local open-source embeddings for semantic
+search, an LLM that answers only from retrieved reviews, and a citation on every claim so a PM can verify it."
+
+---
+
+## 17. Writing the PRD from data (`docs/PRD_Notion_Android_Performance.md`)
+
+The pipeline picked the problem: **performance** was #1 by impact score. The PRD then answers:
+- **Is it real?** 416 reviews, 53% high severity, 2.29★, leaving at about 2x the normal rate, 1,468 "helpful" likes.
+- **What exactly?** Sub-problems: slow open (37%), lag, long pages, crashes.
+- **One bad release or long-running?** It shows up in all 35 app versions, so it's long-running. That changes the
+  solution: a performance budget in CI, not a rollback.
+- **How will we know it worked?** North star = the share of reviews complaining about performance (17% → <10%),
+  re-measured weekly by the n8n digest. Guardrails = desktop doesn't get worse, no new upgrade nagging (the Evernote lesson).
+- **Honesty:** the PRD states what reviews can't tell you (device mix, real load times) and marks those
+  metrics *needs internal data*.
+
+**Say it in an interview:** "The data chose the problem; the PRD turned it into scoped requirements, a
+measurable north star, and guardrails borrowed from what was driving the competitor's users away."
+
+---
+
 ## Coming next
 
 - **Embeddings and RAG:** letting the AI answer questions using *our* reviews, with sources
