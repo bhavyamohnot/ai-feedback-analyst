@@ -3,7 +3,8 @@
 Turns thousands of messy app-store reviews into a ranked list of what to fix, answers questions about
 them with sources, and sends a weekly digest automatically.
 
-**Live dashboard:** https://ai-feedback-analyst.streamlit.app/ (8 tabs, incl. "Ask the reviews" RAG Q&A)
+**Live dashboard:** https://ai-feedback-analyst.streamlit.app/ (8 tabs, incl. "Ask the reviews" RAG Q&A)  
+**PRD (Notion):** [Make Notion on Android feel instant](https://spectacled-toad-d7b.notion.site/PRD_Notion_Android_Performance-41917bc3a83780ff8221e786cdcc06f4)
 
 Demo case: **Notion** (SaaS workspace) vs. its competitor **Evernote**, 12 months of Google Play reviews.
 
