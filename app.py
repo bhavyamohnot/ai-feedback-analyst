@@ -82,7 +82,7 @@ with tabs[0]:
     O = reviews[reviews.app == other]
     st.subheader("In one line")
     if app == "Notion":
-        mob = R.text.str.contains(r"mobile|android|phone", case=False)
+        mob = R.text.str.contains(r"mobile|android|phone|tablet", case=False)
         st.markdown(
             f"Users like Notion as a whole (general opinion **{(R.overall_sentiment == 'positive').mean():.0%} positive**), "
             f"but the **mobile app** drags it down: **{top.Topic.lower()}** is the #1 complaint "
@@ -202,8 +202,9 @@ with tabs[3]:
             y=alt.Y("to:N", sort="-x", axis=ax(None, labelColor=None)),
             tooltip=[alt.Tooltip("to:N", title="switching to"), "reviews"]).properties(height=alt.Step(30)),
             width="stretch")
+        named = int(switching[switching.app == app].reviews.sum())
         st.caption(f"{int(R.churn_signal.sum())} {app} reviewers say they're leaving; "
-                   f"{int(sw.reviews.sum())} of them name where they're going.")
+                   f"{named} name where they're going (top 8 shown).")
 
 # ----------------------------------------------------------------- trends
 with tabs[4]:
