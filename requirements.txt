@@ -1,8 +1,14 @@
-google-play-scraper
+# dashboard + RAG (what the live demo needs)
+streamlit
+altair
 pandas
+numpy
 google-genai
+python-dotenv
+fastembed
+colorama
+# pipeline only (collect, tag, evaluate)
+google-play-scraper
 groq
 anthropic
 pydantic
-python-dotenv
-streamlit

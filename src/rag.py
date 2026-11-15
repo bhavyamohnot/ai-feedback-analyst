@@ -4,8 +4,10 @@
     python src/rag.py ask "Why do people dislike Notion AI?" --app Notion
 
 How it works:
-1. EMBED: every review is turned into a vector (768 numbers that capture its meaning) with
-   Gemini's free embedding model. Saved to data/rag/ so this happens once, not per question.
+1. EMBED: every review is turned into a vector (384 numbers that capture its meaning) with
+   BGE-small, a free open-source embedding model that runs on this computer (no API, no quota).
+   Saved to data/rag/ so this happens once, not per question. (Gemini's embedding API was tried
+   first, but its free tier allows only 1,000 texts a day.)
 2. RETRIEVE: the question is embedded the same way; the reviews whose vectors point in the most
    similar direction (cosine similarity) are the most relevant, even if they share no words
    ("laggy" finds "takes forever to load").
@@ -26,7 +28,7 @@ from dotenv import load_dotenv
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 RAG = DATA / "rag"
-EMBED_MODEL, DIM = "gemini-embedding-001", 768
+EMBED_MODEL = "BAAI/bge-small-en-v1.5"  # 384 dimensions, ~70 MB, runs on CPU
 ANSWER_MODELS = ["gemini-3.5-flash-lite", "gemini-3.8-flash"]  # fallback if the first is overloaded
 TOP_K = 25
 
@@ -37,31 +39,28 @@ def client(api_key=None):
     return genai.Client(api_key=api_key or os.environ["GEMINI_API_KEY"])
 
 
-def embed(c, texts, task):
-    from google.genai import types
-    for attempt in range(8):
-        try:
-            r = c.models.embed_content(model=EMBED_MODEL, contents=texts, config=types.EmbedContentConfig(
-                task_type=task, output_dimensionality=DIM))
-            v = np.array([e.values for e in r.embeddings], dtype=np.float32)
-            return v / np.linalg.norm(v, axis=1, keepdims=True)  # unit length, so dot product = cosine similarity
-        except Exception as e:
-            if getattr(e, "code", None) not in (429, 503) or attempt == 7:
-                raise
-            print(f"  free tier busy or limited, waiting {20 * (attempt + 1)}s...")
-            time.sleep(20 * (attempt + 1))
+_embedder = None
+
+
+def embed(texts, kind):
+    """kind='passage' for reviews, 'query' for questions (BGE adds a search instruction to queries)."""
+    global _embedder
+    if _embedder is None:
+        from fastembed import TextEmbedding
+        _embedder = TextEmbedding(EMBED_MODEL)
+    fn = _embedder.query_embed if kind == "query" else _embedder.passage_embed
+    v = np.array(list(fn(texts)), dtype=np.float32)
+    return v / np.linalg.norm(v, axis=1, keepdims=True)  # unit length, so dot product = cosine similarity
 
 
 def build():
-    c = client()
     df = pd.read_csv(DATA / "clean_reviews.csv")
     RAG.mkdir(exist_ok=True)
     texts = [f"{a} review ({r} stars): {t}" for a, r, t in zip(df.app, df.rating, df.text)]
-    vecs = []
-    for i in range(0, len(texts), 100):  # 100 reviews per request
-        vecs.append(embed(c, texts[i:i + 100], "RETRIEVAL_DOCUMENT"))
-        print(f"  embedded {min(i + 100, len(texts))}/{len(texts)}")
-    np.save(RAG / "embeddings.npy", np.vstack(vecs).astype(np.float16))  # float16 halves the file size
+    t = time.time()
+    vecs = embed(texts, "passage")
+    print(f"embedded {len(texts)} reviews in {time.time() - t:.0f}s")
+    np.save(RAG / "embeddings.npy", vecs.astype(np.float16))  # float16 halves the file size
     df[["review_id"]].to_csv(RAG / "ids.csv", index=False)
     print(f"saved {RAG / 'embeddings.npy'}")
 
@@ -103,7 +102,7 @@ def stats_text(stats, app):
 
 def answer(question, app=None, index=None, c=None):
     c, index = c or client(), index or Index()
-    hits = index.search(embed(c, [question], "RETRIEVAL_QUERY")[0], app)
+    hits = index.search(embed([question], "query")[0], app)
     context = "\n".join(f"[{i + 1}] {r.app}, {r.rating} stars, {r.date:%b %Y}: {r.text}"
                         for i, r in enumerate(hits.itertuples()))
     prompt = (f"Question: {question}\n\nTopic statistics (all {len(index.reviews):,} reviews):\n"
